@@ -3,18 +3,23 @@ import {IProduct} from "../models";
 import axios from "axios";
 import {ErrorMessage} from "./ErrorMessage";
 
-export function CreateProductForm() {
-    const productData: IProduct = {
-        title: 'test product',
-        price: 13.5,
-        description: 'lorem ipsum set',
-        image: 'https://i.pravatar.cc',
-        category: 'electronic',
-        rating: {
-            rate: 42,
-            count: 10
-        }
+const productData: IProduct = {
+    title: 'test product',
+    price: 13.5,
+    description: 'lorem ipsum set',
+    image: 'https://i.pravatar.cc',
+    category: 'electronic',
+    rating: {
+        rate: 42,
+        count: 10
     }
+}
+
+interface CreateProductProps {
+    onCreate: () => void
+}
+
+export function CreateProductForm({onCreate}: CreateProductProps) {
     const [value, setValue] = useState('')
     const [error, setError] = useState('')
     const submitHandler = (event: React.FormEvent) => {
@@ -26,6 +31,7 @@ export function CreateProductForm() {
         }
         productData.title = value
         const resp = axios.post<IProduct>('https://fakestoreapi.com/products', productData)
+        onCreate()
     }
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value)
