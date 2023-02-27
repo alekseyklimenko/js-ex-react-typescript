@@ -5,10 +5,17 @@ import {ErrorMessage} from "./components/ErrorMessage"
 import {Modal} from "./components/Modal"
 import {useProducts} from "./hooks/products";
 import {CreateProductForm} from "./components/CreateProductForm";
+import {IProduct} from "./models";
 
 function App() {
-    const [products, isLoading, error] = useProducts()
+    const [products, isLoading, error, addProduct] = useProducts()
     const [showModal, setShowModal] = useState(true)
+
+    const createHandler = (product: IProduct) => {
+        setShowModal(false)
+        addProduct(product)
+    }
+
     return (
         <div className="container mx-auto max-w-2xl pt-5">
             { isLoading && <Loader/> }
@@ -16,7 +23,7 @@ function App() {
             { products.map(product => <Product product={product} key={product.id} />) }
 
             { showModal && <Modal title="Create new product">
-                <CreateProductForm onCreate={() => setShowModal(false)}/>
+                <CreateProductForm onCreate={createHandler}/>
             </Modal> }
         </div>
     )
